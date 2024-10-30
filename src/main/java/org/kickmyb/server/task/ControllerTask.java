@@ -33,6 +33,12 @@ public class ControllerTask {
         return "";
     }
 
+    @GetMapping(value = "/api/delete/{taskID}", produces = "text/plain")
+    public @ResponseBody String deleteTask(@PathVariable long taskID) {
+        return "";
+    }
+
+
     @GetMapping(value = "/api/progress/{taskID}/{value}", produces = "text/plain")
     public @ResponseBody String updateProgress(@PathVariable long taskID, @PathVariable int value) {
         System.out.println("KICKB SERVER : Progress for task : " + taskID + " @" + value);

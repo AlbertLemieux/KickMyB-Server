@@ -52,6 +52,12 @@ public class ServiceTaskImpl implements ServiceTask {
         return response;
     }
 
+    //TODO : CODE THIS
+    @Override
+    public void deleteOne(long taskID) {
+
+    }
+
     // TODO oublier de valider pour une injection javascript
     // TODO Que se passe-t-il si ce n'est pas transactionnel ()
     // TODO test unicité avec script de charge
@@ -131,6 +137,8 @@ public class ServiceTaskImpl implements ServiceTask {
     public MUser userFromUsername(String username) {
         return repoUser.findByUsername(username).get();
     }
+
+
 
     @Override
     public List<HomeItemPhotoResponse> homePhoto(Long userID) {
