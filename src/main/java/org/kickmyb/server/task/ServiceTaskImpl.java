@@ -3,6 +3,8 @@ package org.kickmyb.server.task;
 import org.joda.time.DateTime;
 import org.kickmyb.server.account.MUser;
 import org.kickmyb.server.account.MUserRepository;
+import org.kickmyb.server.photo.MPhoto;
+import org.kickmyb.server.photo.MPhotoRepository;
 import org.kickmyb.transfer.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,6 +18,7 @@ import java.util.List;
 @Transactional
 public class ServiceTaskImpl implements ServiceTask {
 
+    @Autowired private MPhotoRepository repoPics;
     @Autowired
     MUserRepository repoUser;
     @Autowired MTaskRepository repo;
@@ -55,17 +58,19 @@ public class ServiceTaskImpl implements ServiceTask {
     //TODO : CODE THIS
     @Override
     public void deleteOne(long taskID, MUser user) {
-
+        MUser userCourant = repoUser.findById(user.id).get();
         MTask task = null;
-        for (MTask b : user.tasks) {
-            if (b.id == taskID) {
-            task = b;
-
+        for (MTask t : userCourant.tasks) {
+            if (t.id == taskID) {
+            task = repo.findById(t.id).get();
+            break;
             }
         }
         if(task != null){
-            user.tasks.remove(task);
-            repo.deleteById(taskID);
+
+            //if(task.photo != null) repoPics.delete(task.photo);
+            userCourant.tasks.remove(task);
+            repoUser.save(userCourant);
         }
 
     }

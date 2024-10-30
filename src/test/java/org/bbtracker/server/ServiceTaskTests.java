@@ -8,6 +8,7 @@ import org.kickmyb.server.account.BadCredentialsException;
 import org.kickmyb.server.account.MUser;
 import org.kickmyb.server.account.MUserRepository;
 import org.kickmyb.server.account.ServiceAccount;
+import org.kickmyb.server.photo.ServicePhoto;
 import org.kickmyb.server.task.ServiceTask;
 import org.kickmyb.transfer.AddTaskRequest;
 import org.kickmyb.transfer.SignupRequest;
@@ -40,6 +41,9 @@ class ServiceTaskTests {
 
     @Autowired
     private ServiceTask serviceTask;
+
+    @Autowired
+    private ServicePhoto servicePhoto;
 
     @Test
     void testAddTask() throws ServiceTask.Empty, ServiceTask.TooShort, ServiceTask.Existing {
@@ -114,4 +118,30 @@ class ServiceTaskTests {
             assertEquals(ServiceTask.Existing.class, e.getClass());
         }
     }
+
+    @Test
+    void deleteExistingTask() throws ServiceTask.Empty, ServiceTask.TooShort, ServiceTask.Existing {
+        MUser u = new MUser();
+        u.username = "M. Test";
+        u.password = passwordEncoder.encode("Passw0rd!");
+        userRepository.saveAndFlush(u);
+
+        AddTaskRequest atr = new AddTaskRequest();
+        atr.name = "Tâche de test";
+        atr.deadline = Date.from(new Date().toInstant().plusSeconds(3600));
+
+        serviceTask.addOne(atr, u);
+
+        Assertions.assertEquals(1, serviceTask.home(u.id).size());
+
+
+        //DELETE TASK
+        Long taskToDeleteId = u.tasks.get(0).id;
+
+        serviceTask.deleteOne(taskToDeleteId, u);
+
+        Assertions.assertEquals(0, serviceTask.home(u.id).size());
+
+    }
+
 }
