@@ -54,7 +54,19 @@ public class ServiceTaskImpl implements ServiceTask {
 
     //TODO : CODE THIS
     @Override
-    public void deleteOne(long taskID) {
+    public void deleteOne(long taskID, MUser user) {
+
+        MTask task = null;
+        for (MTask b : user.tasks) {
+            if (b.id == taskID) {
+            task = b;
+
+            }
+        }
+        if(task != null){
+            user.tasks.remove(task);
+            repo.deleteById(taskID);
+        }
 
     }
 

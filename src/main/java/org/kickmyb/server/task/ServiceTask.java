@@ -26,6 +26,6 @@ public interface ServiceTask {
     MUser userFromUsername(String username);
 
     //LABO
-    void deleteOne(long taskID);
+    void deleteOne(long taskID, MUser user);
 
 }
