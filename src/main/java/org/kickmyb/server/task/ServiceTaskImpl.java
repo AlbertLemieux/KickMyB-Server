@@ -68,8 +68,14 @@ public class ServiceTaskImpl implements ServiceTask {
         }
         if(task != null){
 
-            //if(task.photo != null) repoPics.delete(task.photo);
+
             userCourant.tasks.remove(task);
+
+            repo.delete(task);
+
+            if(task.photo != null) {
+                repoPics.delete(task.photo);
+            }
             repoUser.save(userCourant);
         }
 
